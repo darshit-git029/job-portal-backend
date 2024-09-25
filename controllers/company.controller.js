@@ -61,7 +61,10 @@ export const getcompany = async (req, res) => {
             });
     } catch (error) {
         console.log(error);
-        
+        return res.status(500).json({
+            message: "An error occurred while get the company.",
+            success: false
+        });
     }
 }
 
@@ -81,7 +84,10 @@ export const getCompanyById = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-
+        return res.status(500).json({
+            message: "An error occurred while get the company by id.",
+            success: false
+        });
     }
 }
 
@@ -112,6 +118,9 @@ export const updateCompnay = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        
+        return res.status(500).json({
+            message: "An error occurred while updating the company.",
+            success: false
+        });
     }
 }

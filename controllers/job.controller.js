@@ -32,14 +32,16 @@ export const postJob = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-
+        return res.status(400).json({
+            message:"Something went wrong",
+            success:false
+        })
     }
 }
 
 export const getAllJob = async (req, res) => {
     try {
         const keyWord = req.query.keyWord || "";
-        console.log("Received search query:", keyWord); // Debug log
 
         const query = {
             $or: [
@@ -91,7 +93,10 @@ export const getJobById = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching jobs by id .",
+        });
     }
 }
 
@@ -116,6 +121,9 @@ export const getJobAdmin = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching admin jobs.",
+        });
     }
 }

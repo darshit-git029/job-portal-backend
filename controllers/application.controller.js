@@ -44,6 +44,10 @@ export const applyJob = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "An error occurred while applying the job.",
+            success: false
+        });
     }
 }
 
@@ -73,7 +77,10 @@ export const getAppliedJob = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-        
+        return res.status(500).json({
+            message: "An error occurred while get applied job.",
+            success: false
+        });
     }
 }
 
@@ -100,7 +107,10 @@ export const getApplicant = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
-
+        return res.status(500).json({
+            message: "An error occurred while get applicant.",
+            success: false
+        });
     }
 }
 
@@ -134,5 +144,9 @@ export const updateStatus = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "An error occurred while status updating.",
+            success: false
+        });
     }
 }

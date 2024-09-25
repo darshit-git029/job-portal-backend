@@ -16,8 +16,6 @@ export const register = async (req, res) => {
         }
 
         const file = req.file
-        console.log(`here is file ${req.file}`);
-
         const fileUir = getDataUri(file)
         const cloudeResponse = await cloudinary.uploader.upload(fileUir.content)
 
@@ -36,11 +34,11 @@ export const register = async (req, res) => {
             password: hashpassword,
             phoneNumber,
             role,
-            profile:{
-                profilePhoto : cloudeResponse.secure_url  
-                }
+            profile: {
+                profilePhoto: cloudeResponse.secure_url
+            }
         })
-        
+
 
         return res.status(200).json({
             message: ` welcome to job portal, ${fullName} your Account create successfully.`,
@@ -50,7 +48,10 @@ export const register = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-
+        return res.status(400).json({
+            message:"Something went wrong",
+            success:false
+        })
     }
 
 }
@@ -99,14 +100,18 @@ export const login = async (req, res) => {
 
         return res.status(200).json({
             message: `welcome back ${user.fullName}`,
-            data: { 
-                user, 
-                token: token },
+            data: {
+                user,
+                token: token
+            },
             success: true
         })
     }
     catch (error) {
-        console.log(error);
+        return res.status(400).json({
+            message:"Something went wrong",
+            success:false
+        })
 
     }
 }
@@ -120,8 +125,10 @@ export const logout = async (req, res) => {
 
         })
     } catch (error) {
-        console.log(error);
-
+        return res.status(400).json({
+            message:"Something went wrong",
+            success:false
+        })
     }
 }
 
@@ -132,8 +139,13 @@ export const updateProfile = async (req, res) => {
 
         //cloudinary setup for file
         const file = req.file
-        const fileUir = getDataUri(file)
-        const cloudeResponse = await cloudinary.uploader.upload(fileUir.content)
+        if (!file) {
+            console.log("NO file upload");
+            
+            return null ;
+        }
+            const fileUir = getDataUri(file)
+            const cloudeResponse = await cloudinary.uploader.upload(fileUir.content)
 
         let skillArray;
         if (skills) {
@@ -157,9 +169,9 @@ export const updateProfile = async (req, res) => {
 
         //resume comes here
         console.log(file);
-        
-        if(cloudeResponse){
-            user.profile.resume  = cloudeResponse.secure_url;
+
+        if (cloudeResponse) {
+            user.profile.resume = cloudeResponse.secure_url;
             user.profile.resumeOriginalName = file.originalname;
         }
 
@@ -187,6 +199,9 @@ export const updateProfile = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-
+        return res.status(400).json({
+            message:"Something went wrong",
+            success:false
+        })
     }
 }
