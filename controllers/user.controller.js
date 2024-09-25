@@ -11,7 +11,8 @@ export const register = async (req, res) => {
 
         if (!fullName || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({
-                message: "Somethings is missing"
+                message: "Some required fields are missing. Please ensure all fields are filled out correctly."
+
             })
         }
 
@@ -22,7 +23,7 @@ export const register = async (req, res) => {
         const user = await User.findOne({ email })
         if (user) {
             return res.status(400).json({
-                message: "user already exist with this email"
+                message: "user already exist with this email, please try another email"
             })
         }
 
@@ -47,11 +48,11 @@ export const register = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            message:"Something went wrong",
-            success:false
-        })
+        console.log(error.message);
+        return res.status(500).json({ // 500 Internal Server Error for unexpected issues
+            message: "An internal server error occurred. Please try again later.",
+            success: false
+        });
     }
 
 }
@@ -108,8 +109,8 @@ export const login = async (req, res) => {
         })
     }
     catch (error) {
-        return res.status(400).json({
-            message:"Something went wrong",
+        return res.status(500).json({
+            message:"internal server error, Please try again later",
             success:false
         })
 
@@ -125,8 +126,8 @@ export const logout = async (req, res) => {
 
         })
     } catch (error) {
-        return res.status(400).json({
-            message:"Something went wrong",
+        return res.status(500).json({
+            message:"internal server error, Please try again later",
             success:false
         })
     }
@@ -199,9 +200,9 @@ export const updateProfile = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
-            message:"Something went wrong",
-            success:false
+  return res.status(500).json({
+    message:"internal server error, Please try again later",
+    success:false
         })
     }
 }

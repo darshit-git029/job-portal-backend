@@ -23,8 +23,8 @@ export const applyJob = async (req, res) => {
         //check job is avilable to apply
         const job = await Job.findById(JobID)
         if (!job) {
-            return res.status(400).json({
-                message: "job is not founde."
+            return res.status(404).json({
+                message: "job is not found."
             })
         }
 
@@ -39,13 +39,13 @@ export const applyJob = async (req, res) => {
         await job.save()
 
         return res.status(201).json({
-            message: "Job applied successfully",
+            message: "job applied successfully",
             success: true
         })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while applying the job.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -66,7 +66,7 @@ export const getAppliedJob = async (req, res) => {
         if (!application) {
             return res.status(404).json({
                 success:false,
-                message: "No application.",
+                message: "No application yet.",
             })
         }
 
@@ -78,7 +78,7 @@ export const getAppliedJob = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while get applied job.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -97,7 +97,7 @@ export const getApplicant = async (req, res) => {
         })
         if (!job) {
             return res.status(404).json({
-                message: "job is not found."
+                message: "job not found."
             })
         }
 
@@ -108,7 +108,7 @@ export const getApplicant = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while get applicant.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -145,7 +145,7 @@ export const updateStatus = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while status updating.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }

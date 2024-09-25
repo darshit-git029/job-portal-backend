@@ -8,7 +8,7 @@ export const postJob = async (req, res) => {
 
         if (!title || !description || !requirement || !salary || !location || !jobType || !experience || !position || !companyID) {
             return res.status(400).json({
-                message: "Sonthing is missing."
+                message: "Some required fields are missing. Please ensure all fields are filled out correctly."
             })
         }
         const job = await Job.create({
@@ -32,8 +32,8 @@ export const postJob = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
-            message:"Something went wrong",
+        return res.status(500).json({
+            message:"internal server error, please try again later",
             success:false
         })
     }
@@ -69,7 +69,7 @@ export const getAllJob = async (req, res) => {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while fetching jobs.",
+            message:"internal server error, please try again later",
         });
     }
 };
@@ -95,7 +95,7 @@ export const getJobById = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while fetching jobs by id .",
+            message:"internal server error, please try again later",
         });
     }
 }
@@ -123,7 +123,7 @@ export const getJobAdmin = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while fetching admin jobs.",
+            message:"internal server error, please try again later",
         });
     }
 }

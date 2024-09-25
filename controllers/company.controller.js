@@ -18,7 +18,7 @@ export const registerCompany = async (req, res) => {
         let company = await Company.findOne({ name: companyName });
         if (company) {
             return res.status(400).json({
-                message: "You can't register the same company.",
+                message: "This company is already registered. Try a different name.",
                 success: false
             });
         }
@@ -39,7 +39,7 @@ export const registerCompany = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({
-            message: "An error occurred while registering the company.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -62,7 +62,7 @@ export const getcompany = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while get the company.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -85,7 +85,7 @@ export const getCompanyById = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while get the company by id.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
@@ -95,7 +95,7 @@ export const updateCompnay = async (req, res) => {
     try {
         const { name, description, website, location } = req.body;
         //cloudeinary
-        const file = req.file;
+        const file =req.file;
         const fileUir  = getDataUri(file)
         const cloudeResponse = await cloudinary.uploader.upload(fileUir.content)
         const logo = cloudeResponse.secure_url
@@ -119,7 +119,7 @@ export const updateCompnay = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "An error occurred while updating the company.",
+            message:"internal server error, Please try again later",
             success: false
         });
     }
