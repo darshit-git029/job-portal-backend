@@ -21,6 +21,15 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+//swagger configration
+import swaggerUi from "swagger-ui-express";
+import swaggerUser from "./swagger/swaggerUserAPI.json" assert { type: "json" };
+import swaggerCompany from "./swagger/swaggerCompanyAPI.json" assert { type: "json" };
+import swaggerjob from "./swagger/swaggerJobAPI.json" assert{type:"json"}
+var options = {};
+app.use('/api/user', swaggerUi.serveFiles(swaggerUser, options), swaggerUi.setup(swaggerUser));
+app.use('/api/company', swaggerUi.serveFiles(swaggerCompany, options), swaggerUi.setup(swaggerCompany))
+app.use('/api/job', swaggerUi.serveFiles(swaggerjob, options), swaggerUi.setup(swaggerjob))
 //apis
 
 app.use("/api/v1/user",userRoute)
