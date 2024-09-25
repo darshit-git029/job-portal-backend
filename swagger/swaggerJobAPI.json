@@ -1,0 +1,481 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Company API",
+    "description": "API for company data",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "description": "The full name of the user.",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user.",
+            "example": "john.doe@example.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the user.",
+            "example": "+1234567890"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password (hashed).",
+            "example": "hashedPassword123"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["student", "recruiter"],
+            "description": "The role of the user.",
+            "example": "student"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "bio": {
+                "type": "string",
+                "description": "A short biography of the user.",
+                "example": "A passionate student and developer."
+              },
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "A list of skills the user possesses.",
+                "example": ["JavaScript", "Node.js", "React"]
+              },
+              "resume": {
+                "type": "string",
+                "format": "binary",
+                "description": "URL to the user's resume file.",
+                "example": "http://example.com/resume.pdf"
+              },
+              "resumeOriginalName": {
+                "type": "string",
+                "description": "The original name of the resume file.",
+                "example": "JohnDoe_Resume.pdf"
+              },
+              "company": {
+                "type": "string",
+                "description": "The ID of the company associated with the user.",
+                "example": "609d1c1b1c4a4d45a4b8a123"
+              },
+              "file": {
+                "type": "string",
+                "description": "URL to the user's profile photo uploaded to Cloudinary.",
+                "example": "http://res.cloudinary.com/example/image/upload/v1610000000/profile.jpg"
+              }
+            }
+          }
+        },
+        "required": ["fullName", "email", "phoneNumber", "password", "role"]
+      },
+      "job": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "requirement": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "string"
+          },
+          "experienceLevel": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "jobType": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/user/login": {
+      "post": {
+        "tags": ["user"],
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "darshitbarvadiya@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The user password",
+                    "example": "darshit"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["student", "recruiter"],
+                    "description": "The role of the user.",
+                    "required": true
+                  }
+                },
+                "required": ["email", "password", "role"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The newly login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/job/get": {
+      "get": {
+        "tags": ["job"],
+        "summary": "Get all job",
+        "responses": {
+          "200": {
+            "description": "A list of jobs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/job/post": {
+      "post": {
+        "tags": ["job"],
+        "summary": "Create a new job",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "requirement": {
+                    "type": "string"
+                  },
+                  "salary": {
+                    "type": "string"
+                  },
+                  "experienceLevel": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "jobType": {
+                    "type": "string"
+                  },
+                  "position": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "requirement",
+                  "salary",
+                  "experienceLevel",
+                  "location",
+                  "jobType",
+                  "position"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/job/getjobadmin": {
+      "get": {
+        "tags": ["job"],
+        "summary": "Get all job",
+        "responses": {
+          "200": {
+            "description": "A list of jobs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/job/getById/{id}": {
+      "get": {
+        "tags": ["job"],
+        "summary": "Get a job by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "objectId"
+            },
+            "description": "ID of the job to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A job object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/application/apply/{id}": {
+      "get": {
+        "tags": ["job"],
+        "summary": "Get a job by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "objectId"
+            },
+            "description": "ID of the job to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A job object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/application/get": {
+      "get": {
+        "tags": ["job"],
+        "summary": "Get applied job",
+        "responses": {
+          "200": {
+            "description": "A list of applied jobs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/application/{id}/applicant": {
+        "get": {
+            "tags": ["job"],
+            "summary": "Get a job by ID",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "format": "objectId"
+                },
+                "description": "ID of the job to retrieve"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "A job object",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/job"
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Job not found"
+              },
+              "500": {
+                "description": "Internal server error"
+              }
+            }
+          }
+    },
+"/api/v1/application/status/{id}/update": {
+  "post": {
+    "tags": ["application"],
+    "summary": "Update application status by ID",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "objectId"
+        },
+        "description": "ID of the application to update"
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["Pending", "Accepted", "Rejected"], 
+                "description": "The new status of the application"
+              }
+            },
+            "required": ["status"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Application status updated successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Application status updated successfully."
+                },
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Invalid input"
+      },
+      "404": {
+        "description": "Application not found"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}
+
+  }
+}
