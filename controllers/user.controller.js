@@ -68,13 +68,13 @@ export const login = async (req, res) => {
         let user = await User.findOne({ email })
         if (!user) {
             return res.status(400).json({
-                message: "Incorrect email or password user not found"
+                message: "Incorrect email, user not found."
             })
         }
         const ispasswoedMatch = await bcrypt.compare(password, user.password)
         if (!ispasswoedMatch) {
             return res.status(400).json({
-                message: "Incorrect email or password user not found"
+                message: "Incorrect password. Please try again."
             })
         }
         //check rola correct or not 
