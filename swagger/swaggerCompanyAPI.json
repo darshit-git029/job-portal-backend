@@ -43,7 +43,6 @@
             "type": "string",
             "description": "Location of the company"
           },
-         
           "userID": {
             "type": "string",
             "format": "objectId",
@@ -59,7 +58,8 @@
             "format": "date-time",
             "description": "Timestamp when the company was last updated"
           }
-        }      },
+        }
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -248,67 +248,71 @@
         }
       }
     },
-"/api/v1/company/update/{id}": {
-  "put": {
-    "tags": ["Company"],
-    "summary": "Update company data by ID",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "objectId"
-        },
-        "description": "ID of the company to update"
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "multipart/form-data": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "website": {
-                "type": "string"
-              },
-              "location": {
-                "type": "string"
-              }
-            },
-            "required": ["name", "description", "website", "location"]
-          }
-        }
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "The company data updated successfully",
-        "content": {
-          "application/json": {
+    "/api/v1/company/update/{id}": {
+      "put": {
+        "tags": ["Company"],
+        "summary": "Update company data by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "$ref": "#/components/schemas/company"
+              "type": "string",
+              "format": "objectId"
+            },
+            "description": "ID of the company to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "website": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The company logo file"
+                  }
+                },
+                "required": ["name", "description", "website", "location", "file"]
+              }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "The company data updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/company"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input, object invalid"
+          },
+          "404": {
+            "description": "Company not found"
+          }
         }
-      },
-      "400": {
-        "description": "Invalid input, object invalid"
-      },
-      "404": {
-        "description": "Company not found"
       }
     }
-  }
-}
-
   }
 }

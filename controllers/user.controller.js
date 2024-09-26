@@ -140,10 +140,8 @@ export const updateProfile = async (req, res) => {
 
         //cloudinary setup for file
         const file = req.file
-        if (!file) {
-            console.log("NO file upload");
-            
-            return null ;
+        if (!req.file) {
+            console.log("please upload resume file");
         }
             const fileUir = getDataUri(file)
             const cloudeResponse = await cloudinary.uploader.upload(fileUir.content)

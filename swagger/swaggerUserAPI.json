@@ -2,12 +2,99 @@
   "openapi": "3.0.0",
   "info": {
     "title": "User API",
-    "description": "API for User data ",
+    "description": "API for User data",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "http://localhost:5000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "description": "The full name of the user.",
+            "example": "full name"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user.",
+            "example": "user@example.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the user.",
+            "example": "+1234567890"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password (hashed)."
+           
+          },
+          "role": {
+            "type": "string",
+            "enum": ["student", "recruiter"],
+            "description": "The role of the user.",
+            "example": "student"
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "bio": {
+                "type": "string",
+                "description": "A short biography of the user.",
+                "example": "A passionate student and developer."
+              },
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "A list of skills the user possesses.",
+                "example": ["JavaScript", "Node.js", "React"]
+              },
+              "resume": {
+                "type": "string",
+                "format": "binary",
+                "description": "URL to the user's resume file.",
+                "example": "http://example.com/resume.pdf"
+              },
+              "resumeOriginalName": {
+                "type": "string",
+                "description": "The original name of the resume file.",
+                "example": "user_Resume.pdf"
+              },
+              "company": {
+                "type": "string",
+                "description": "The ID of the company associated with the user.",
+                "example": "609d1c1b1c4a4d45a4b8a123"
+              },
+              "file": {
+                "type": "string",
+                "description": "URL to the user's profile photo uploaded to Cloudinary.",
+                "example": "http://res.cloudinary.com/example/image/upload/v1610000000/profile.jpg"
+              }
+            }
+          }
+        },
+        "required": ["fullName", "email", "phoneNumber", "password", "role"]
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
     }
   ],
   "paths": {
@@ -126,7 +213,7 @@
         },
         "responses": {
           "200": {
-            "description": "The newly login user",
+            "description": "The newly logged in user",
             "content": {
               "application/json": {
                 "schema": {
@@ -141,10 +228,10 @@
     "/api/v1/user/logout": {
       "get": {
         "tags": ["user"],
-        "summary": "logout user",
+        "summary": "Logout user",
         "responses": {
           "200": {
-            "description": "logout successfully",
+            "description": "Logout successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -156,147 +243,81 @@
         }
       }
     },
-    "/api/v1/user/profile/update": {    
-  "post": {
-    "tags": ["user"],
-    "summary": "Update user profile",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "multipart/form-data": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "fullName": {
-                "type": "string",
-                "description": "The user's full name",
-                "example": "John Doe"
-              },
-              "email": {
-                "type": "string",
-                "format": "email",
-                "description": "The user's email address",
-                "example": "user@example.com"
-              },
-              "phoneNumber": {
-                "type": "string",
-                "description": "The user's phone number",
-                "example": "+1234567890"
-              },
-              "bio": {
-                "type": "string",
-                "description": "A short biography of the user",
-                "example": "A passionate student and developer."
-              },
-              "skills": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "A list of skills the user possesses.",
-                "example": ["JavaScript", "Node.js", "React"]
-              }
-            
-            },
-            "required": ["email", "fullName", "bio", "phoneNumber", "skills"]
+    "/api/v1/user/profile/update": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Update user profile",
+        "security": [
+          {
+            "BearerAuth": []
           }
-        }
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "The user updated successfully",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/User"
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Invalid input, object invalid"
-      },
-      "404": {
-        "description": "User not found"
-      }
-    }
-  }
-}
-
-  },
-  "components": {
-    "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "fullName": {
-            "type": "string",
-            "description": "The full name of the user.",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "description": "The email address of the user.",
-            "example": "john.doe@example.com"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "description": "The phone number of the user.",
-            "example": "+1234567890"
-          },
-          "password": {
-            "type": "string",
-            "description": "The user's password (hashed).",
-            "example": "hashedPassword123"
-          },
-          "role": {
-            "type": "string",
-            "enum": ["student", "recruiter"],
-            "description": "The role of the user.",
-            "example": "student"
-          },
-          "profile": {
-            "type": "object",
-            "properties": {
-              "bio": {
-                "type": "string",
-                "description": "A short biography of the user.",
-                "example": "A passionate student and developer."
-              },
-              "skills": {
-                "type": "array",
-                "items": {
-                  "type": "string"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "description": "The user's full name",
+                    "example": "Your name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The user's email address",
+                    "example": "user@example.com"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "The user's phone number",
+                    "example": "+1234567890"
+                  },
+                  "bio": {
+                    "type": "string",
+                    "description": "A short biography of the user",
+                    "example": "A passionate student and developer."
+                  },
+                  "skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "A list of skills the user possesses.",
+                    "example": ["JavaScript", "Node.js", "React"]
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The user's resume file"
+                   
+                  }
                 },
-                "description": "A list of skills the user possesses.",
-                "example": ["JavaScript", "Node.js", "React"]
-              },
-              "resume": {
-                "type": "string",
-                "format":"binary",
-                "description": "URL to the user's resume file.",
-                "example": "http://example.com/resume.pdf"
-              },
-              "resumeOriginalName": {
-                "type": "string",
-                "description": "The original name of the resume file.",
-                "example": "JohnDoe_Resume.pdf"
-              },
-              "company": {
-                "type": "string",
-                "description": "The ID of the company associated with the user.",
-                "example": "609d1c1b1c4a4d45a4b8a123"
-              },
-              "file": {
-                "type": "string",
-                "description": "URL to the user's profile photo uploaded to Cloudinary.",
-                "example": "http://res.cloudinary.com/example/image/upload/v1610000000/profile.jpg"
+                "required": ["email", "fullName", "phoneNumber", "bio", "skills"]
               }
             }
           }
         },
-        "required": ["fullName", "email", "phoneNumber", "password", "role"]
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input, object invalid"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
       }
     }
   }
